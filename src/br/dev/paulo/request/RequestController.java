@@ -1,5 +1,7 @@
 package br.dev.paulo.request;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class RequestController {
 	
 	private String pacoteBase;
@@ -8,7 +10,6 @@ public class RequestController {
 		this.pacoteBase = pacoteBase;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public Object executar(String url) {
 		String[] partesUrl = url.replaceFirst("/", "")
 				.split("/");
@@ -19,13 +20,17 @@ public class RequestController {
 		
 		try {
 			Class<?> classeControle = Class.forName(pacoteBase + nomeControlador);
-			Object instanciaControle = classeControle.newInstance();
+			Object instanciaControle = classeControle.getDeclaredConstructor().newInstance();
 			
 			System.out.println(instanciaControle);
 			
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException  e) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | 
+				NoSuchMethodException | SecurityException  e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Erro no construtor!", e.getTargetException());
 		}
 		
 		return null;
