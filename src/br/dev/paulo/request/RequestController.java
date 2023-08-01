@@ -1,6 +1,7 @@
 package br.dev.paulo.request;
 
-import java.lang.reflect.InvocationTargetException;
+import br.dev.paulo.request.protocolo.Request;
+import br.dev.paulo.request.reflexao.Reflexao;
 
 public class RequestController {
 	
@@ -11,30 +12,27 @@ public class RequestController {
 	}
 	
 	public Object executar(String url) {
-		String[] partesUrl = url.replaceFirst("/", "")
-				.split("/");
+		Request request = new Request(url);
+		String nomeControlador = request.getNomeControlador();
+		String nomeMetodo = request.getNomeMetodo();
 		
-		String nomeControlador = Character.toUpperCase(partesUrl[0].charAt(0)) 
-				+ partesUrl[0].substring(1)
-				+ "Controller";
+//		Object instanciaControle = new Reflexao()
+//				.refletirClasse(pacoteBase + nomeControlador)
+//				.getConstrutorPadrao()
+//				.invocar();
 		
-		try {
-			Class<?> classeControle = Class.forName(pacoteBase + nomeControlador);
-			Object instanciaControle = classeControle.getDeclaredConstructor().newInstance();
+		Object retorno = new Reflexao()
+				.refletirClasse(pacoteBase + nomeControlador)
+				.criarInstancia()
+				.getMetodo(nomeMetodo)
+				.invocar();
+		
+		System.out.println(retorno);
 			
-			System.out.println(instanciaControle);
-			
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | 
-				NoSuchMethodException | SecurityException  e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Erro no construtor!", e.getTargetException());
-		}
+//		System.out.println("CONTROLADOR: " + instanciaControle);
+//		System.out.println("MÉTODO: " + nomeMetodo);
 		
-		return null;
+		return retorno;
 	}
-	
 	
 }
