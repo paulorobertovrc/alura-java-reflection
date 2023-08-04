@@ -1,6 +1,6 @@
 package br.dev.paulo.estoque.model;
 
-public class Produto {
+public class Produto extends SuperProduto {
 	
 	private String nome;
 	private double valor;

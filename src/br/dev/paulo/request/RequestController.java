@@ -2,6 +2,7 @@ package br.dev.paulo.request;
 
 import java.util.Map;
 
+import br.dev.paulo.conversor.ConversorXML;
 import br.dev.paulo.request.protocolo.Request;
 import br.dev.paulo.request.reflexao.Reflexao;
 
@@ -32,6 +33,8 @@ public class RequestController {
 				.invocar();
 		
 		System.out.println(retorno);
+		
+		retorno = new ConversorXML().converter(retorno);
 		
 		return retorno;
 	}
