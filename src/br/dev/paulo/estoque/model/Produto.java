@@ -1,5 +1,8 @@
 package br.dev.paulo.estoque.model;
 
+import br.dev.paulo.conversor.anotacao.NomeTagXml;
+
+@NomeTagXml("produto")
 public class Produto extends SuperProduto {
 	
 	private String nome;
