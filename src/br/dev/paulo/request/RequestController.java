@@ -24,6 +24,11 @@ public class RequestController {
 				.refletirClasse(pacoteBase + nomeControlador)
 				.criarInstancia()
 				.getMetodo(nomeMetodo, params)
+				.comTratamentoExcecao((metodo, ex) -> {
+					System.out.println("Erro no método " + metodo.getName() + " da classe " + 
+							metodo.getDeclaringClass().getName() + ".\n\n");
+					throw new RuntimeException("Erro no método!");
+				})
 				.invocar();
 		
 		System.out.println(retorno);
