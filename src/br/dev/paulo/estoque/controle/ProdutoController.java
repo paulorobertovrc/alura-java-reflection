@@ -3,14 +3,14 @@ package br.dev.paulo.estoque.controle;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.dev.paulo.estoque.dao.ProdutoDaoMock;
+import br.dev.paulo.estoque.dao.ProdutoDao;
 import br.dev.paulo.estoque.model.Produto;
 
 public class ProdutoController {
 	
-	private ProdutoDaoMock produtoDao;
+	private ProdutoDao produtoDao;
 	
-	public ProdutoController(ProdutoDaoMock produtoDao) {
+	public ProdutoController(ProdutoDao produtoDao) {
 		this.produtoDao = produtoDao;
 	}
 	

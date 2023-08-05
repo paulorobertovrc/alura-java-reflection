@@ -42,5 +42,9 @@ public class RequestController {
 		
 		return retorno;
 	}
+
+	public <T, K extends T> void registrar(Class<T> tipoFonte, Class<K> tipoDestino) {
+		container.registrar(tipoFonte, tipoDestino);
+	}
 	
 }

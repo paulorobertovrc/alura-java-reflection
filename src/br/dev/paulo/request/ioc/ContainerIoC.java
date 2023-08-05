@@ -4,12 +4,23 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 public class ContainerIoC {
+	
+	private Map<Class<?>,Class<?>> mapaTipos = new HashMap<>();
+	
     public Object getInstancia(Class<?> tipoFonte) {
+    	Class<?> tipoDestino = mapaTipos.get(tipoFonte);
+    	
+    	if (tipoDestino != null) {
+    		return getInstancia(tipoDestino);
+    	}
+    	
         Stream<Constructor<?>> construtores =
                 Stream.of(tipoFonte.getDeclaredConstructors());
 
@@ -40,5 +51,34 @@ public class ContainerIoC {
 
         }
     }
+
+	public <T, K extends T> void registrar(Class<T> tipoFonte, Class<K> tipoDestino) {
+//		boolean compativel = verificarCompatibilidadeReflection(tipoFonte, tipoDestino);
+//		if (!compativel) throw new ClassCastException("Não é possível resolver " + tipoFonte.getName() + " para " + tipoDestino.getName());
+		
+		mapaTipos.put(tipoFonte, tipoDestino);
+	}
+
+	/*
+	
+	private boolean verificarCompatibilidade(Class<?> tipoFonte, Class<?> tipoDestino) { // Implementação própria
+		boolean compativel;
+		
+		if (tipoFonte.isInterface()) {
+			compativel = Stream.of(tipoDestino.getInterfaces())
+				.anyMatch(interfaceImplementada -> interfaceImplementada.equals(tipoFonte));
+		} else {
+			compativel = tipoDestino.getSuperclass().equals(tipoFonte)
+					|| tipoDestino.equals(tipoFonte);
+		}
+		
+		return compativel;
+	}
+	
+	private boolean verificarCompatibilidadeReflection(Class<?> tipoFonte, Class<?> tipoDestino) { // Implementação da Reflection API
+		return tipoFonte.isAssignableFrom(tipoDestino);
+	}
+	
+	*/
     
 }

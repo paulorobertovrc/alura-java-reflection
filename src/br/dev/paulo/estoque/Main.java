@@ -2,6 +2,8 @@ package br.dev.paulo.estoque;
 
 import java.util.Scanner;
 
+import br.dev.paulo.estoque.dao.ProdutoDao;
+import br.dev.paulo.estoque.dao.ProdutoDaoMock;
 import br.dev.paulo.request.RequestController;
 
 public class Main {
@@ -22,6 +24,7 @@ public class Main {
 			String url = s.nextLine();
 			
 			RequestController request = new RequestController("br.dev.paulo.estoque.controle.");
+			request.registrar(ProdutoDao.class, ProdutoDaoMock.class);
 			
 			while(!url.equals("exit") && !url.isBlank()) {
 				Object response = request.executar(url);
