@@ -3,6 +3,8 @@ package br.dev.paulo.conversor;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+import br.dev.paulo.conversor.anotacao.NomeTagXml;
+
 public class ConversorXML {
 	
 	public String converter(Object objeto) {
@@ -22,13 +24,23 @@ public class ConversorXML {
 				
 				xmlBuilder.append("</lista>");
 			} else {
-				String nomeClasse = classeObjeto.getName();
+				String nomeClasse;
+				
+				if (classeObjeto.isAnnotationPresent(NomeTagXml.class)) {
+					nomeClasse = classeObjeto.getDeclaredAnnotation(NomeTagXml.class).value();
+				} else {
+					nomeClasse = classeObjeto.getName();
+				}				
+				
 				xmlBuilder.append("<" + nomeClasse + ">");
 				
 				for (Field atributo : classeObjeto.getDeclaredFields()) {
 					atributo.setAccessible(true);
 					
-					String nomeAtributo = atributo.getName();
+					NomeTagXml anotacaoAtributo = atributo.getDeclaredAnnotation(NomeTagXml.class);
+					
+					String nomeAtributo =
+							anotacaoAtributo == null ? atributo.getName() : anotacaoAtributo.value();
 					Object valorAtributo = atributo.get(objeto);
 					
 					xmlBuilder.append("<" + nomeAtributo + ">");
